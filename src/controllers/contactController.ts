@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { ContactService } from '../services/contactService';
 import { Router } from 'express';
 import { ContactArchivedService } from '../services/contactArchivedService';
+import { ContactValidator } from '../validators/contactValidator';
 
 export const contactRouter = Router();
 const contactservice = new ContactService();
@@ -70,16 +71,26 @@ contactRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
 });
 
 contactRouter.post(baseUrl, (req: Request, res: Response) => {
-    const newcontact = contactservice.create(req.body);
-    res.status(201).json(newcontact);
+    const validation = ContactValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
+    } else {
+        const newcontact = contactservice.create(req.body);
+        res.status(201).json(newcontact);
+    }
 });
 
 contactRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
-    const updatedcontact = contactservice.update(parseInt(req.params.id), req.body);
-    if (updatedcontact !== null) {
-        res.status(204).json(updatedcontact);
+    const validation = ContactValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
     } else {
-        res.status(404).json({ message: 'contact not found' });
+        const updatedcontact = contactservice.update(parseInt(req.params.id), req.body);
+        if (updatedcontact !== null) {
+            res.status(204).json(updatedcontact);
+        } else {
+            res.status(404).json({ message: 'contact not found' });
+        }
     }
 });
 
@@ -114,16 +125,26 @@ contactRouter.get(baseUrl2 + '/:id', (req: Request, res: Response) => {
 });
 
 contactRouter.post(baseUrl2, (req: Request, res: Response) => {
-    const newcontact = contactArchivedservice.create(req.body);
-    res.status(201).json(newcontact);
+    const validation = ContactValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
+    } else {
+        const newcontact = contactArchivedservice.create(req.body);
+        res.status(201).json(newcontact);
+    }
 });
 
 contactRouter.put(baseUrl2 + '/:id', (req: Request, res: Response) => {
-    const updatedcontact = contactArchivedservice.update(parseInt(req.params.id), req.body);
-    if (updatedcontact !== null) {
-        res.status(204).json(updatedcontact);
+    const validation = ContactValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
     } else {
-        res.status(404).json({ message: 'contact not found' });
+        const updatedcontact = contactArchivedservice.update(parseInt(req.params.id), req.body);
+        if (updatedcontact !== null) {
+            res.status(204).json(updatedcontact);
+        } else {
+            res.status(404).json({ message: 'contact not found' });
+        }
     }
 });
 

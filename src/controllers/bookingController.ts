@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BookingService } from '../services/bookingService';
 import { Router } from 'express';
+import { BookingValidator } from '../validators/bookingValidator';
 
 export const bookingRouter = Router();
 const bookingservice = new BookingService();
@@ -76,16 +77,26 @@ bookingRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
 });
 
 bookingRouter.post(baseUrl, (req: Request, res: Response) => {
-    const newbooking = bookingservice.create(req.body);
-    res.status(201).json(newbooking);
+    const validation = BookingValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
+    } else {
+        const newbooking = bookingservice.create(req.body);
+        res.status(201).json(newbooking);
+    }
 });
 
 bookingRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
-    const updatedbooking = bookingservice.update(parseInt(req.params.id), req.body);
-    if (updatedbooking !== null) {
-        res.status(204).json(updatedbooking);
+    const validation = BookingValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
     } else {
-        res.status(404).json({ message: 'booking not found' });
+        const updatedbooking = bookingservice.update(parseInt(req.params.id), req.body);
+        if (updatedbooking !== null) {
+            res.status(204).json(updatedbooking);
+        } else {
+            res.status(404).json({ message: 'booking not found' });
+        }
     }
 });
 

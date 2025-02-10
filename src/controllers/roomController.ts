@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RoomService } from '../services/roomService';
 import { Router } from 'express';
+import { RoomValidator } from '../validators/roomValidator';
 
 export const roomRouter = Router();
 const roomservice = new RoomService();
@@ -76,16 +77,26 @@ roomRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
 });
 
 roomRouter.post(baseUrl, (req: Request, res: Response) => {
-    const newroom = roomservice.create(req.body);
-    res.status(201).json(newroom);
+    const validation = RoomValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
+    } else {
+        const newroom = roomservice.create(req.body);
+        res.status(201).json(newroom);
+    }
 });
 
 roomRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
-    const updatedroom = roomservice.update(parseInt(req.params.id), req.body);
-    if (updatedroom !== null) {
-        res.status(204).json(updatedroom);
+    const validation = RoomValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
     } else {
-        res.status(404).json({ message: 'room not found' });
+        const updatedroom = roomservice.update(parseInt(req.params.id), req.body);
+        if (updatedroom !== null) {
+            res.status(204).json(updatedroom);
+        } else {
+            res.status(404).json({ message: 'room not found' });
+        }
     }
 });
 

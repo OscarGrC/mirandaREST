@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { Router } from 'express';
+import { UserValidator } from '../validators/userValidator';
 
 export const userRouter = Router();
 const userService = new UserService();
@@ -74,16 +75,26 @@ userRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
 });
 
 userRouter.post(baseUrl, (req: Request, res: Response) => {
-    const newuser = userService.create(req.body);
-    res.status(201).json(newuser);
+    const validation = UserValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
+    } else {
+        const newuser = userService.create(req.body);
+        res.status(201).json(newuser);
+    }
 });
 
 userRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
-    const updateduser = userService.update(parseInt(req.params.id), req.body);
-    if (updateduser !== null) {
-        res.status(204).json(updateduser);
+    const validation = UserValidator.validate(req.body);
+    if (!validation.valid) {
+        res.status(400).json({ errors: validation.errors });
     } else {
-        res.status(404).json({ message: 'user not found' });
+        const updateduser = userService.update(parseInt(req.params.id), req.body);
+        if (updateduser !== null) {
+            res.status(204).json(updateduser);
+        } else {
+            res.status(404).json({ message: 'user not found' });
+        }
     }
 });
 
