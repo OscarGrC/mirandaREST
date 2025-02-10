@@ -1,0 +1,23 @@
+{
+  "name": "mirandarest",
+  "version": "1.0.0",
+  "description": "Api Rest to serve data to HotelMiranda App ",
+  "homepage": "https://github.com/OscarGrC/mirandaREST#readme",
+  "bugs": {
+    "url": "https://github.com/OscarGrC/mirandaREST/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OscarGrC/mirandaREST.git"
+  },
+  "license": "ISC",
+  "author": "Oscar Gracia Cobo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
