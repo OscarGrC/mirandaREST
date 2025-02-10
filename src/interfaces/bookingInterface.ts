@@ -1,4 +1,4 @@
-export interface BookingApiInterface {
+export interface BookingInterface {
     guest: {
         name: string;
         last_name: string;
