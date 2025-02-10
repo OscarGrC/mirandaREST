@@ -2,7 +2,7 @@ import { UserInterface } from "../interfaces/userInterface";
 import usersData from "../data/users.json";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class userservice implements ServiceInterface<UserInterface> {
+export class UserService implements ServiceInterface<UserInterface> {
     private users: UserInterface[] = usersData as UserInterface[];
 
     fetchAll(): UserInterface[] {
@@ -14,9 +14,9 @@ export class userservice implements ServiceInterface<UserInterface> {
     }
 
     create(user: UserInterface): UserInterface {
-        const newBooking = { ...user, id: this.users.length + 1 };
-        this.users.push(newBooking);
-        return newBooking;
+        const newUser = { ...user, id: this.users.length + 1 };
+        this.users.push(newUser);
+        return newUser;
     }
 
     update(id: number, user: UserInterface): UserInterface | null {

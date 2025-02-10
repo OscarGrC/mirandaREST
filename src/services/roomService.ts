@@ -2,7 +2,7 @@ import { RoomInterface } from "../interfaces/roomInterface";
 import roomsData from "../data/rooms.json";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class roomservice implements ServiceInterface<RoomInterface> {
+export class RoomService implements ServiceInterface<RoomInterface> {
     private rooms: RoomInterface[] = roomsData as RoomInterface[];
 
     fetchAll(): RoomInterface[] {
