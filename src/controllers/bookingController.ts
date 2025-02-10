@@ -28,7 +28,7 @@ const baseUrl = '/bookings'
  *               items:
  *                 type: object
  *                 properties: 
- *                     guest:
+ *                   guest:
  *                     type: object
  *                     properties:
  *                       name:

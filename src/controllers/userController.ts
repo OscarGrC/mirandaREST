@@ -33,32 +33,31 @@ const baseUrl = '/users'
  *                     example: 1
  *                   photo:
  *                     type: string
- *                     example: https://urlFoto.com
+ *                     example: "https://urlFoto.com"
  *                   fullName:
  *                     type: string
- *                     example: Oscar Gracia 
+ *                     example: "Oscar Gracia"
  *                   puesto:
  *                     type: string
- *                     example: Recepcionista
+ *                     example: "Recepcionista"
  *                   email:
  *                     type: string
- *                     example: ejemplo@gmail.com
- *                  phone:
+ *                     example: "ejemplo@gmail.com"
+ *                   phone:
  *                     type: string
- *                     example: +34 635317016 
- *                   starDate:
+ *                     example: "+34 635317016"
+ *                   startDate:
  *                     type: string
- *                     example: 2025-01-31
+ *                     example: "2025-01-31"
  *                   description:
  *                     type: string
- *                     example: funciones que cumple nuestro empleado 
- *                    stade:
+ *                     example: "Funciones que cumple nuestro empleado"
+ *                   stade:
  *                     type: boolean
- *                     example: True
+ *                     example: true
  *                   password:
  *                     type: string
- *                     example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0Njc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.BllItoUQNU6-vhXLDI9JDUzDszW2htjB0q1RnM8SzSY
- * 
+ *                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0Njc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.BllItoUQNU6-vhXLDI9JDUzDszW2htjB0q1RnM8SzSY"
  */
 userRouter.get(baseUrl, (req: Request, res: Response) => {
     const usersList = userService.fetchAll();

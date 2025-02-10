@@ -33,34 +33,38 @@ const baseUrl = '/rooms'
  *                     example: 1
  *                   room_number:
  *                     type: string
- *                     example: R001
+ *                     example: "R001"
  *                   room_type:
  *                     type: string
- *                     example: Suit
+ *                     example: "Suit"
  *                   amenities:
- *                     type: integer[]
+ *                     type: array
+ *                     items:
+ *                       type: integer
  *                     example: [1,2,3,4,5,8]
  *                   price:
  *                     type: integer
  *                     example: 9999
- *                  offert_price:
+ *                   offert_price:
  *                     type: integer
  *                     example: 8999
  *                   offert:
  *                     type: boolean
- *                     example: True
+ *                     example: true
  *                   status:
  *                     type: boolean
- *                     example: True
- *                    cancelation:
+ *                     example: true
+ *                   cancelation:
  *                     type: string
- *                     example: No reembolsable 
+ *                     example: "No reembolsable"
  *                   description:
  *                     type: string
- *                     example:"Suit con vistas a la piscina"
+ *                     example: "Suit con vistas a la piscina"
  *                   photos:
- *                      type:string[]
- *                      example:[https://urlfoto1.com,https://urlfoto2.com,https://urlfoto3.com]
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     example: ["https://urlfoto1.com", "https://urlfoto2.com", "https://urlfoto3.com"]
  */
 roomRouter.get(baseUrl, (req: Request, res: Response) => {
     const roomsList = roomservice.fetchAll();
