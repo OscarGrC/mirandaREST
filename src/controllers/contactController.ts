@@ -1,15 +1,13 @@
-import { Request, Response } from 'express';
 import { ContactService } from '../services/contactService';
 import { Router } from 'express';
 import { ContactArchivedService } from '../services/contactArchivedService';
 import { ContactValidator } from '../validators/contactValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-
-export const contactRouter = Router();
-const contactservice = new ContactService();
-const contactArchivedservice = new ContactArchivedService()
-const baseUrl = '/contact'
-const baseUrl2 = '/contactArchived'
+import { GetFun } from '../common/genericFuntions/getfun';
+import { GetIdFun } from '../common/genericFuntions/getIdfun';
+import { PutFun } from '../common/genericFuntions/putfun';
+import { PostFun } from '../common/genericFuntions/postfun';
+import { DeleteFun } from '../common/genericFuntions/deletefun';
 
 /**
  * @swagger
@@ -232,103 +230,21 @@ const baseUrl2 = '/contactArchived'
  *       404:
  *         description: Contacto archivado no encontrado
  */
-contactRouter.get(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const contactList = contactservice.fetchAll();
-    res.json(contactList);
-});
+export const contactRouter = Router();
+const contactservice = new ContactService();
+const contactArchivedservice = new ContactArchivedService()
+const baseUrl = '/contact'
+const baseUrl2 = '/contactArchived'
 
-contactRouter.get(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const contact = contactservice.fetchById(parseInt(req.params.id));
-    if (contact) {
-        res.json(contact);
-    } else {
-        res.status(404).json({ message: 'contact not found' });
-    }
-});
+contactRouter.get(baseUrl, authenticateJWT, GetFun(contactservice));
+contactRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(contactservice, "Contact"));
+contactRouter.post(baseUrl, authenticateJWT, PostFun(contactservice, ContactValidator))
+contactRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(contactservice, ContactValidator, "Contact"))
+contactRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(contactservice, "Contact"))
 
-contactRouter.post(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const validation = ContactValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const newcontact = contactservice.create(req.body);
-        res.status(201).json(newcontact);
-    }
-});
+contactRouter.get(baseUrl2, GetFun(contactArchivedservice));
+contactRouter.get(baseUrl2 + '/:id', authenticateJWT, GetIdFun(contactArchivedservice, "Contact"));
+contactRouter.post(baseUrl2, authenticateJWT, PostFun(contactArchivedservice, ContactValidator))
+contactRouter.put(baseUrl2 + '/:id', authenticateJWT, PutFun(contactArchivedservice, ContactValidator, "Contact"))
+contactRouter.delete(baseUrl2 + '/:id', authenticateJWT, DeleteFun(contactArchivedservice, "Contact"))
 
-contactRouter.put(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const validation = ContactValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const updatedcontact = contactservice.update(parseInt(req.params.id), req.body);
-        if (updatedcontact !== null) {
-            res.status(204).json(updatedcontact);
-        } else {
-            res.status(404).json({ message: 'contact not found' });
-        }
-    }
-});
-
-contactRouter.delete(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const contact = contactservice.fetchById(parseInt(req.params.id));
-    if (contact != undefined) {
-        const addArchived = contactArchivedservice.create(contact);
-        if (addArchived != undefined) {
-            const deletedcontact = contactservice.delete(parseInt(req.params.id));
-            if (deletedcontact) {
-                res.status(204).json({ message: 'contact deleted' });
-            }
-        }
-    } else {
-        res.status(404).json({ message: 'contact not found' });
-    }
-});
-
-
-contactRouter.get(baseUrl2, authenticateJWT, (req: Request, res: Response) => {
-    const contactList = contactArchivedservice.fetchAll();
-    res.json(contactList);
-});
-
-contactRouter.get(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const contact = contactArchivedservice.fetchById(parseInt(req.params.id));
-    if (contact) {
-        res.json(contact);
-    } else {
-        res.status(404).json({ message: 'contact not found' });
-    }
-});
-
-contactRouter.post(baseUrl2, authenticateJWT, (req: Request, res: Response) => {
-    const validation = ContactValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const newcontact = contactArchivedservice.create(req.body);
-        res.status(201).json(newcontact);
-    }
-});
-
-contactRouter.put(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const validation = ContactValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const updatedcontact = contactArchivedservice.update(parseInt(req.params.id), req.body);
-        if (updatedcontact !== null) {
-            res.status(204).json(updatedcontact);
-        } else {
-            res.status(404).json({ message: 'contact not found' });
-        }
-    }
-});
-
-contactRouter.delete(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const deletedcontact = contactArchivedservice.delete(parseInt(req.params.id));
-    if (deletedcontact) {
-        res.status(204).json({ message: 'contact deleted' });
-    } else {
-        res.status(404).json({ message: 'contact not found' });
-    }
-});

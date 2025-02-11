@@ -1,7 +1,7 @@
 import { BookingInterface } from "../interfaces/bookingInterface";
 
 export class BookingValidator {
-    static validate(booking: BookingInterface): { valid: boolean; errors: string[] } {
+    validate(booking: BookingInterface): { valid: boolean; errors: string[] } {
         const errors: string[] = [];
 
         if (!booking.guest || !booking.guest.name || !booking.guest.last_name) {

@@ -1,12 +1,13 @@
-import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { Router } from 'express';
 import { UserValidator } from '../validators/userValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
+import { GetFun } from '../common/genericFuntions/getfun';
+import { GetIdFun } from '../common/genericFuntions/getIdfun';
+import { PutFun } from '../common/genericFuntions/putfun';
+import { PostFun } from '../common/genericFuntions/postfun';
+import { DeleteFun } from '../common/genericFuntions/deletefun';
 
-export const userRouter = Router();
-const userService = new UserService();
-const baseUrl = '/users'
 /**
  * @swagger
  * tags:
@@ -148,49 +149,12 @@ const baseUrl = '/users'
  *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0Njc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.BllItoUQNU6-vhXLDI9JDUzDszW2htjB0q1RnM8SzSY"
  */
 
-userRouter.get(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const usersList = userService.fetchAll();
-    res.json(usersList);
-});
+export const userRouter = Router();
+const userService = new UserService();
+const baseUrl = '/users'
 
-userRouter.get(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const user = userService.fetchById(parseInt(req.params.id));
-    if (user) {
-        res.json(user);
-    } else {
-        res.status(404).json({ message: 'user not found' });
-    }
-});
-
-userRouter.post(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const validation = UserValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const newuser = userService.create(req.body);
-        res.status(201).json(newuser);
-    }
-});
-
-userRouter.put(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const validation = UserValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const updateduser = userService.update(parseInt(req.params.id), req.body);
-        if (updateduser !== null) {
-            res.status(204).json(updateduser);
-        } else {
-            res.status(404).json({ message: 'user not found' });
-        }
-    }
-});
-
-userRouter.delete(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const deleteduser = userService.delete(parseInt(req.params.id));
-    if (deleteduser) {
-        res.status(204).json({ message: 'user deleted' });
-    } else {
-        res.status(404).json({ message: 'user not found' });
-    }
-});
+userRouter.get(baseUrl, authenticateJWT, GetFun(userService));
+userRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(userService, "User"));
+userRouter.post(baseUrl, authenticateJWT, PostFun(userService, UserValidator))
+userRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(userService, UserValidator, "User"))
+userRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(userService, "User"))

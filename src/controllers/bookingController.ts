@@ -1,12 +1,13 @@
-import { Request, Response } from 'express';
 import { BookingService } from '../services/bookingService';
 import { Router } from 'express';
 import { BookingValidator } from '../validators/bookingValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
+import { GetFun } from '../common/genericFuntions/getfun';
+import { GetIdFun } from '../common/genericFuntions/getIdfun';
+import { PutFun } from '../common/genericFuntions/putfun';
+import { PostFun } from '../common/genericFuntions/postfun';
+import { DeleteFun } from '../common/genericFuntions/deletefun';
 
-export const bookingRouter = Router();
-const bookingservice = new BookingService();
-const baseUrl: string = '/bookings';
 /**
  * @swagger
  * tags:
@@ -143,49 +144,14 @@ const baseUrl: string = '/bookings';
  *         description: Booking no encontrado
  */
 
-bookingRouter.get(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const bookingsList = bookingservice.fetchAll();
-    res.json(bookingsList);
-});
+export const bookingRouter = Router();
+const bookingservice = new BookingService();
+const baseUrl: string = '/bookings';
 
-bookingRouter.get(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const booking = bookingservice.fetchById(parseInt(req.params.id));
-    if (booking) {
-        res.json(booking);
-    } else {
-        res.status(404).json({ message: 'booking not found' });
-    }
-});
+bookingRouter.get(baseUrl, authenticateJWT, GetFun(bookingservice));
+bookingRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(bookingservice, "Booking"));
+bookingRouter.post(baseUrl, authenticateJWT, PostFun(bookingservice, BookingValidator));
+bookingRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(bookingservice, BookingValidator, "Booking"));
+bookingRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(bookingservice, "Booking"));
 
-bookingRouter.post(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const validation = BookingValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const newbooking = bookingservice.create(req.body);
-        res.status(201).json(newbooking);
-    }
-});
 
-bookingRouter.put(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const validation = BookingValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const updatedbooking = bookingservice.update(parseInt(req.params.id), req.body);
-        if (updatedbooking !== null) {
-            res.status(204).json(updatedbooking);
-        } else {
-            res.status(404).json({ message: 'booking not found' });
-        }
-    }
-});
-
-bookingRouter.delete(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const deletedbooking = bookingservice.delete(parseInt(req.params.id));
-    if (deletedbooking) {
-        res.status(204).json({ message: 'booking deleted' });
-    } else {
-        res.status(404).json({ message: 'booking not found' });
-    }
-});

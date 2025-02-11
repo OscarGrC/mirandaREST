@@ -1,12 +1,13 @@
-import { Request, Response } from 'express';
 import { RoomService } from '../services/roomService';
 import { Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
+import { GetFun } from '../common/genericFuntions/getfun';
+import { GetIdFun } from '../common/genericFuntions/getIdfun';
+import { PutFun } from '../common/genericFuntions/putfun';
+import { PostFun } from '../common/genericFuntions/postfun';
+import { DeleteFun } from '../common/genericFuntions/deletefun';
 
-export const roomRouter = Router();
-const roomservice = new RoomService();
-const baseUrl = '/rooms'
 /**
  * @swagger
  * tags:
@@ -154,50 +155,13 @@ const baseUrl = '/rooms'
  *             type: string
  *           example: ["https://urlfoto1.com", "https://urlfoto2.com", "https://urlfoto3.com"]
  */
+export const roomRouter = Router();
+const roomservice = new RoomService();
+const baseUrl = '/rooms'
 
-roomRouter.get(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const roomsList = roomservice.fetchAll();
-    res.json(roomsList);
-});
+roomRouter.get(baseUrl, authenticateJWT, GetFun(roomservice));
+roomRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(roomservice, "Room"));
+roomRouter.post(baseUrl, authenticateJWT, PostFun(roomservice, RoomValidator))
+roomRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(roomservice, RoomValidator, "Room"))
+roomRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(roomservice, "Room"))
 
-roomRouter.get(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const room = roomservice.fetchById(parseInt(req.params.id));
-    if (room) {
-        res.json(room);
-    } else {
-        res.status(404).json({ message: 'room not found' });
-    }
-});
-
-roomRouter.post(baseUrl, authenticateJWT, (req: Request, res: Response) => {
-    const validation = RoomValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const newroom = roomservice.create(req.body);
-        res.status(201).json(newroom);
-    }
-});
-
-roomRouter.put(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const validation = RoomValidator.validate(req.body);
-    if (!validation.valid) {
-        res.status(400).json({ errors: validation.errors });
-    } else {
-        const updatedroom = roomservice.update(parseInt(req.params.id), req.body);
-        if (updatedroom !== null) {
-            res.status(204).json(updatedroom);
-        } else {
-            res.status(404).json({ message: 'room not found' });
-        }
-    }
-});
-
-roomRouter.delete(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
-    const deletedroom = roomservice.delete(parseInt(req.params.id));
-    if (deletedroom) {
-        res.status(204).json({ message: 'room deleted' });
-    } else {
-        res.status(404).json({ message: 'room not found' });
-    }
-});
