@@ -2,11 +2,11 @@ import { BookingService } from '../services/bookingService';
 import { Router } from 'express';
 import { BookingValidator } from '../validators/bookingValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-import { GetFun } from '../common/genericFuntions/getfun';
-import { GetIdFun } from '../common/genericFuntions/getIdfun';
-import { PutFun } from '../common/genericFuntions/putfun';
-import { PostFun } from '../common/genericFuntions/postfun';
-import { DeleteFun } from '../common/genericFuntions/deletefun';
+import { GetFun } from '../utils/genericFuntions/getfun';
+import { GetIdFun } from '../utils/genericFuntions/getIdfun';
+import { PutFun } from '../utils/genericFuntions/putfun';
+import { PostFun } from '../utils/genericFuntions/postfun';
+import { DeleteFun } from '../utils/genericFuntions/deletefun';
 
 /**
  * @swagger
