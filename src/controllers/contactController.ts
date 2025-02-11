@@ -3,27 +3,32 @@ import { ContactService } from '../services/contactService';
 import { Router } from 'express';
 import { ContactArchivedService } from '../services/contactArchivedService';
 import { ContactValidator } from '../validators/contactValidator';
+import { authenticateJWT } from '../middleware/authenticateJWT';
 
 export const contactRouter = Router();
 const contactservice = new ContactService();
 const contactArchivedservice = new ContactArchivedService()
 const baseUrl = '/contact'
 const baseUrl2 = '/contactArchived'
+
 /**
  * @swagger
  * tags:
- *   - name: contact
- *     description: Operaciones relacionadas con contact
+ *   - name: Contact
+ *     description: Operaciones relacionadas con los contactos
+ *   - name: ContactArchived
+ *     description: Operaciones relacionadas con los contactos archivados
  */
+
 /**
  * @swagger
- * /api/v1/contact :
+ * /api/v1/contact:
  *   get:
- *     summary: Obtiene una lista de contact
+ *     summary: Obtiene una lista de contactos
  *     tags: [Contact]
  *     responses:
  *       200:
- *         description: Lista de contact
+ *         description: Lista de contactos
  *         content:
  *           application/json:
  *             schema:
@@ -55,13 +60,184 @@ const baseUrl2 = '/contactArchived'
  *                   comment:
  *                     type: string
  *                     example: "Quisiera cambiar mi fecha de check-in"
+ *   post:
+ *     summary: Crea un nuevo contacto
+ *     tags: [Contact]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       201:
+ *         description: Contacto creado correctamente
+ *       400:
+ *         description: Error de validación en los datos enviados
  */
-contactRouter.get(baseUrl, (req: Request, res: Response) => {
+
+/**
+ * @swagger
+ * /api/v1/contact/{id}:
+ *   get:
+ *     summary: Obtiene un contacto por ID
+ *     tags: [Contact]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto
+ *     responses:
+ *       200:
+ *         description: Datos del contacto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Contact'
+ *       404:
+ *         description: Contacto no encontrado
+ *   put:
+ *     summary: Actualiza un contacto por ID
+ *     tags: [Contact]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       204:
+ *         description: Contacto actualizado correctamente
+ *       400:
+ *         description: Error de validación en los datos enviados
+ *       404:
+ *         description: Contacto no encontrado
+ *   delete:
+ *     summary: Elimina un contacto por ID
+ *     tags: [Contact]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto a eliminar
+ *     responses:
+ *       204:
+ *         description: Contacto eliminado correctamente
+ *       404:
+ *         description: Contacto no encontrado
+ */
+
+/**
+ * @swagger
+ * /api/v1/contactArchived:
+ *   get:
+ *     summary: Obtiene una lista de contactos archivados
+ *     tags: [ContactArchived]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de contactos archivados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Contact'
+ *   post:
+ *     summary: Crea un nuevo contacto archivado
+ *     tags: [ContactArchived]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       201:
+ *         description: Contacto archivado correctamente
+ *       400:
+ *         description: Error de validación en los datos enviados
+ */
+
+/**
+ * @swagger
+ * /api/v1/contactArchived/{id}:
+ *   get:
+ *     summary: Obtiene un contacto archivado por ID
+ *     tags: [ContactArchived]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto archivado
+ *     responses:
+ *       200:
+ *         description: Datos del contacto archivado encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Contact'
+ *       404:
+ *         description: Contacto archivado no encontrado
+ *   put:
+ *     summary: Actualiza un contacto archivado por ID
+ *     tags: [ContactArchived]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto archivado a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       204:
+ *         description: Contacto archivado actualizado correctamente
+ *       400:
+ *         description: Error de validación en los datos enviados
+ *       404:
+ *         description: Contacto archivado no encontrado
+ *   delete:
+ *     summary: Elimina un contacto archivado por ID
+ *     tags: [ContactArchived]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del contacto archivado a eliminar
+ *     responses:
+ *       204:
+ *         description: Contacto archivado eliminado correctamente
+ *       404:
+ *         description: Contacto archivado no encontrado
+ */
+contactRouter.get(baseUrl, authenticateJWT, (req: Request, res: Response) => {
     const contactList = contactservice.fetchAll();
     res.json(contactList);
 });
 
-contactRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
+contactRouter.get(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const contact = contactservice.fetchById(parseInt(req.params.id));
     if (contact) {
         res.json(contact);
@@ -70,7 +246,7 @@ contactRouter.get(baseUrl + '/:id', (req: Request, res: Response) => {
     }
 });
 
-contactRouter.post(baseUrl, (req: Request, res: Response) => {
+contactRouter.post(baseUrl, authenticateJWT, (req: Request, res: Response) => {
     const validation = ContactValidator.validate(req.body);
     if (!validation.valid) {
         res.status(400).json({ errors: validation.errors });
@@ -80,7 +256,7 @@ contactRouter.post(baseUrl, (req: Request, res: Response) => {
     }
 });
 
-contactRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
+contactRouter.put(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const validation = ContactValidator.validate(req.body);
     if (!validation.valid) {
         res.status(400).json({ errors: validation.errors });
@@ -94,7 +270,7 @@ contactRouter.put(baseUrl + '/:id', (req: Request, res: Response) => {
     }
 });
 
-contactRouter.delete(baseUrl + '/:id', (req: Request, res: Response) => {
+contactRouter.delete(baseUrl + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const contact = contactservice.fetchById(parseInt(req.params.id));
     if (contact != undefined) {
         const addArchived = contactArchivedservice.create(contact);
@@ -110,12 +286,12 @@ contactRouter.delete(baseUrl + '/:id', (req: Request, res: Response) => {
 });
 
 
-contactRouter.get(baseUrl2, (req: Request, res: Response) => {
+contactRouter.get(baseUrl2, authenticateJWT, (req: Request, res: Response) => {
     const contactList = contactArchivedservice.fetchAll();
     res.json(contactList);
 });
 
-contactRouter.get(baseUrl2 + '/:id', (req: Request, res: Response) => {
+contactRouter.get(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const contact = contactArchivedservice.fetchById(parseInt(req.params.id));
     if (contact) {
         res.json(contact);
@@ -124,7 +300,7 @@ contactRouter.get(baseUrl2 + '/:id', (req: Request, res: Response) => {
     }
 });
 
-contactRouter.post(baseUrl2, (req: Request, res: Response) => {
+contactRouter.post(baseUrl2, authenticateJWT, (req: Request, res: Response) => {
     const validation = ContactValidator.validate(req.body);
     if (!validation.valid) {
         res.status(400).json({ errors: validation.errors });
@@ -134,7 +310,7 @@ contactRouter.post(baseUrl2, (req: Request, res: Response) => {
     }
 });
 
-contactRouter.put(baseUrl2 + '/:id', (req: Request, res: Response) => {
+contactRouter.put(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const validation = ContactValidator.validate(req.body);
     if (!validation.valid) {
         res.status(400).json({ errors: validation.errors });
@@ -148,7 +324,7 @@ contactRouter.put(baseUrl2 + '/:id', (req: Request, res: Response) => {
     }
 });
 
-contactRouter.delete(baseUrl2 + '/:id', (req: Request, res: Response) => {
+contactRouter.delete(baseUrl2 + '/:id', authenticateJWT, (req: Request, res: Response) => {
     const deletedcontact = contactArchivedservice.delete(parseInt(req.params.id));
     if (deletedcontact) {
         res.status(204).json({ message: 'contact deleted' });

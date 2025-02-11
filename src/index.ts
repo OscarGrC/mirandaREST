@@ -1,11 +1,46 @@
 import express, { Request, Response } from 'express';
 
 import dotenv from 'dotenv';
-import { loginRouter } from './middleware/loginController';
+import { loginRouter } from './controllers/loginController';
 import { bookingRouter } from './controllers/bookingController';
 import { roomRouter } from './controllers/roomController';
 import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
+/**
+ * @swagger
+ * /api/v1/login:
+ *   post:
+ *     summary: Iniciar sesión y obtener un token JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "ejemplo@gmail.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Token JWT generado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Usuario no encontrado o credenciales incorrectas
+ *       500:
+ *         description: Error en el servidor
+ */
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');

@@ -4,6 +4,43 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserInterface } from '../interfaces/userInterface';
 
+/**
+ * @swagger
+ * /api/v1/login:
+ *   post:
+ *     summary: Iniciar sesión y obtener un token JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "ejemplo@gmail.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Token JWT generado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Usuario no encontrado o credenciales incorrectas
+ *       500:
+ *         description: Error en el servidor
+ */
+
+
 export const loginRouter = Router();
 
 loginRouter.post('', (req: Request, res: Response) => {
