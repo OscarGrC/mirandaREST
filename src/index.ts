@@ -79,7 +79,7 @@ app.get('/live', (req: Request, res: Response) => {
     res.send(`${new Date().toISOString()}`);
 });
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 app.listen(port, () => {
