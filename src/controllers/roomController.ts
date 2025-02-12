@@ -157,11 +157,9 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  */
 export const roomRouter = Router();
 const roomservice = new RoomService();
-const baseUrl = '/rooms'
-
-roomRouter.get(baseUrl, authenticateJWT, GetFun(roomservice));
-roomRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(roomservice, "Room"));
-roomRouter.post(baseUrl, authenticateJWT, PostFun(roomservice, RoomValidator))
-roomRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(roomservice, RoomValidator, "Room"))
-roomRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(roomservice, "Room"))
+roomRouter.get("/", authenticateJWT, GetFun(roomservice));
+roomRouter.get("/:id", authenticateJWT, GetIdFun(roomservice, "Room"));
+roomRouter.post("/", authenticateJWT, PostFun(roomservice, RoomValidator));
+roomRouter.put("/:id", authenticateJWT, PutFun(roomservice, RoomValidator, "Room"));
+roomRouter.delete("/:id", authenticateJWT, DeleteFun(roomservice, "Room"));
 

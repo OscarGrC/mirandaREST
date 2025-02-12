@@ -1,18 +1,23 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ServiceInterface } from '../../interfaces/serviceInterface';
 
 export function PutFun<T>(service: ServiceInterface<T>, validator: any, messageType: string) {
-    return (req: Request, res: Response) => {
+    return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const validation = validator.validate(req.body);
+
         if (!validation.valid) {
             res.status(400).json({ errors: validation.errors });
         }
-        const updatedItem = service.update(parseInt(req.params.id), req.body);
 
-        if (updatedItem !== null) {
-            res.status(204).json(updatedItem);
-        } else {
-            res.status(404).json({ message: `${messageType} not found` });
+        try {
+            const updatedItem = await service.update(parseInt(req.params.id), req.body);
+            if (updatedItem) {
+                res.status(204).json(updatedItem);
+            } else {
+                res.status(404).json({ message: `${messageType} not found` });
+            }
+        } catch (error) {
+            next(error);
         }
     };
 }
