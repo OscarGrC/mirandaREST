@@ -67,7 +67,7 @@ const swaggerOptions = {
 };
 
 app.use(express.json());
-app.use("/login", loginRouter);
+app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/bookings", bookingRouter);
 app.use("/api/v1/rooms", roomRouter);
 app.use("/api/v1/contact", contactRouter);
@@ -79,7 +79,7 @@ app.get('/live', (req: Request, res: Response) => {
     res.send(`${new Date().toISOString()}`);
 });
 
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 app.listen(port, () => {

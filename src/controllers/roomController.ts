@@ -1,5 +1,5 @@
 import { RoomService } from '../services/roomService';
-import { Router } from 'express';
+import { NextFunction, Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
 import { GetFun } from '../utils/genericFuntions/getfun';
@@ -7,6 +7,7 @@ import { GetIdFun } from '../utils/genericFuntions/getIdfun';
 import { PutFun } from '../utils/genericFuntions/putfun';
 import { PostFun } from '../utils/genericFuntions/postfun';
 import { DeleteFun } from '../utils/genericFuntions/deletefun';
+import { GetByDates } from '../utils/genericFuntions/getByDates';
 
 /**
  * @swagger
@@ -21,6 +22,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   get:
  *     summary: Obtiene una lista de habitaciones
  *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: [] 
  *     responses:
  *       200:
  *         description: Lista de habitaciones disponibles
@@ -33,6 +36,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   post:
  *     summary: Crea una nueva habitación
  *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -73,6 +78,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   put:
  *     summary: Actualiza una habitación por ID
  *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,6 +103,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   delete:
  *     summary: Elimina una habitación por ID
  *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -108,6 +117,46 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *         description: Habitación eliminada correctamente
  *       404:
  *         description: Habitación no encontrada
+ */
+
+/**
+ * @swagger
+ * /api/v1/rooms/filter:
+ *   post:
+ *     summary: Filtra habitaciones disponibles según fechas
+ *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: [] 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               check_in:
+ *                 type: string
+ *                 format: date
+ *                 example: "13/10/2025"
+ *               check_out:
+ *                 type: string
+ *                 format: date
+ *                 example: "26/10/2025"
+ *     responses:
+ *       200:
+ *         description: Lista de habitaciones disponibles en el rango de fechas proporcionado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Room'
+ *       400:
+ *         description: Faltan parámetros en la solicitud
+ *       401:
+ *         description: No autorizado, token no proporcionado o inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 /**
@@ -157,9 +206,11 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  */
 export const roomRouter = Router();
 const roomservice = new RoomService();
+
 roomRouter.get("/", authenticateJWT, GetFun(roomservice));
 roomRouter.get("/:id", authenticateJWT, GetIdFun(roomservice, "Room"));
 roomRouter.post("/", authenticateJWT, PostFun(roomservice, RoomValidator));
 roomRouter.put("/:id", authenticateJWT, PutFun(roomservice, RoomValidator, "Room"));
 roomRouter.delete("/:id", authenticateJWT, DeleteFun(roomservice, "Room"));
 
+roomRouter.post("/filter", authenticateJWT, GetByDates(roomservice));

@@ -35,6 +35,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   post:
  *     summary: Crea un nuevo usuario
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -54,6 +56,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   get:
  *     summary: Obtiene un usuario por ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -73,6 +77,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   put:
  *     summary: Actualiza un usuario por ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,6 +102,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   delete:
  *     summary: Elimina un usuario por ID
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -151,7 +159,7 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
 
 export const userRouter = Router();
 const userService = new UserService();
-const baseUrl = '/users'
+const baseUrl = ''
 
 userRouter.get(baseUrl, authenticateJWT, GetFun(userService));
 userRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(userService, "User"));

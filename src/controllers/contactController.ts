@@ -24,6 +24,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   get:
  *     summary: Obtiene una lista de contactos
  *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: [] 
  *     responses:
  *       200:
  *         description: Lista de contactos
@@ -61,6 +63,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   post:
  *     summary: Crea un nuevo contacto
  *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -80,6 +84,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   get:
  *     summary: Obtiene un contacto por ID
  *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -99,6 +105,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   put:
  *     summary: Actualiza un contacto por ID
  *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -122,6 +130,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   delete:
  *     summary: Elimina un contacto por ID
  *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -138,7 +148,7 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
 
 /**
  * @swagger
- * /api/v1/contactArchived:
+ * /api/v1/contact/archived:
  *   get:
  *     summary: Obtiene una lista de contactos archivados
  *     tags: [ContactArchived]
@@ -156,6 +166,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   post:
  *     summary: Crea un nuevo contacto archivado
  *     tags: [ContactArchived]
+ *     security:
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -171,10 +183,12 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
 
 /**
  * @swagger
- * /api/v1/contactArchived/{id}:
+ * /api/v1/contact/archived/{id}:
  *   get:
  *     summary: Obtiene un contacto archivado por ID
  *     tags: [ContactArchived]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -194,6 +208,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   put:
  *     summary: Actualiza un contacto archivado por ID
  *     tags: [ContactArchived]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -217,6 +233,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   delete:
  *     summary: Elimina un contacto archivado por ID
  *     tags: [ContactArchived]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -233,8 +251,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
 export const contactRouter = Router();
 const contactservice = new ContactService();
 const contactArchivedservice = new ContactArchivedService()
-const baseUrl = '/contact'
-const baseUrl2 = '/contactArchived'
+const baseUrl = ''
+const baseUrl2 = '/archived'
 
 contactRouter.get(baseUrl, authenticateJWT, GetFun(contactservice));
 contactRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(contactservice, "Contact"));

@@ -69,6 +69,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   post:
  *     summary: Crea un nuevo booking
  *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -88,6 +90,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   get:
  *     summary: Obtiene un booking por ID
  *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -107,6 +111,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   put:
  *     summary: Actualiza un booking por ID
  *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -130,6 +136,8 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
  *   delete:
  *     summary: Elimina un booking por ID
  *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: [] 
  *     parameters:
  *       - in: path
  *         name: id
@@ -146,12 +154,12 @@ import { DeleteFun } from '../utils/genericFuntions/deletefun';
 
 export const bookingRouter = Router();
 const bookingservice = new BookingService();
-const baseUrl: string = '/bookings';
+const baseUrl: string = '/';
 
 bookingRouter.get(baseUrl, authenticateJWT, GetFun(bookingservice));
-bookingRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(bookingservice, "Booking"));
+bookingRouter.get(baseUrl + ':id', authenticateJWT, GetIdFun(bookingservice, "Booking"));
 bookingRouter.post(baseUrl, authenticateJWT, PostFun(bookingservice, BookingValidator));
-bookingRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(bookingservice, BookingValidator, "Booking"));
-bookingRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(bookingservice, "Booking"));
+bookingRouter.put(baseUrl + ':id', authenticateJWT, PutFun(bookingservice, BookingValidator, "Booking"));
+bookingRouter.delete(baseUrl + ':id', authenticateJWT, DeleteFun(bookingservice, "Booking"));
 
 
