@@ -1,7 +1,7 @@
 import { BookingInterface } from "../interfaces/bookingInterface";
 
 export class BookingValidator {
-    validate(booking: BookingInterface): { valid: boolean; errors: string[] } {
+    static validate(booking: BookingInterface): { valid: boolean; errors: string[] } {
         const errors: string[] = [];
 
         if (!booking.guest || !booking.guest.name || !booking.guest.last_name) {
@@ -47,7 +47,7 @@ export class BookingValidator {
 
         return {
             valid: errors.length === 0,
-            errors,
+            errors: errors,
         };
     }
 }

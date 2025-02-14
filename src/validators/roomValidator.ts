@@ -7,10 +7,10 @@ export class RoomValidator {
         if (!room.id || room.id <= 0) {
             errors.push("El ID de la habitación debe ser un número positivo.");
         }
-        if (!room.room_number || room.room_number.trim() === "") {
+        if (!room.number || room.number.trim() === "") {
             errors.push("El número de habitación no puede estar vacío.");
         }
-        if (!room.room_type || room.room_type.trim() === "") {
+        if (!room.type || room.type.trim() === "") {
             errors.push("El tipo de habitación no puede estar vacío.");
         }
         if (!Array.isArray(room.amenities) || room.amenities.some(a => typeof a !== "number" || a <= 0)) {
@@ -43,7 +43,7 @@ export class RoomValidator {
         */
         return {
             valid: errors.length === 0,
-            errors,
+            errors: errors,
         };
     }
 }

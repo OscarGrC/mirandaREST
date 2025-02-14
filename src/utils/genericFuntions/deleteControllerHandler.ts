@@ -7,7 +7,7 @@ export function DeleteFun<T>(service: ServiceInterface<T>, messageType: string) 
             const deletedItem = service.delete(parseInt(req.params.id));
 
             if (deletedItem) {
-                res.status(204).json({ message: `${messageType} deleted` });
+                res.status(200).json({ message: `${messageType} deleted` });
             } else {
                 res.status(404).json({ message: `${messageType} not found` });
             }

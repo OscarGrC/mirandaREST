@@ -56,7 +56,7 @@ export class UserValidator {
 
         return {
             valid: errors.length === 0,
-            errors,
+            errors: errors,
         };
     }
 }

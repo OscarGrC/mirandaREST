@@ -15,7 +15,7 @@ export class ContactValidator {
             errors.push("El apellido del cliente no puede estar vacío.");
         }
 
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}TT([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
         if (!dateRegex.test(contact.date)) {
             errors.push("La fecha debe tener el formato 'YYYY-MM-DD'.");
         }
@@ -30,7 +30,7 @@ export class ContactValidator {
 
         return {
             valid: errors.length === 0,
-            errors,
+            errors: errors,
         };
     }
 }

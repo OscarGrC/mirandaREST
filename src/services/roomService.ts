@@ -37,7 +37,7 @@ export class RoomService implements RoomServiceInterface<RoomInterface> {
             .map(booking => booking.room.number); // Extraemos las rooms
 
         // Filtrar habitaciones disponibles
-        const availableRooms = this.rooms.filter(room => !bookedRoomIds.includes(room.room_number));
+        const availableRooms = this.rooms.filter(room => !bookedRoomIds.includes(room.number));
         return availableRooms;
     }
 

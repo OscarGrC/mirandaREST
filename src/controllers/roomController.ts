@@ -2,12 +2,12 @@ import { RoomService } from '../services/roomService';
 import { NextFunction, Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-import { GetFun } from '../utils/genericFuntions/getfun';
-import { GetIdFun } from '../utils/genericFuntions/getIdfun';
-import { PutFun } from '../utils/genericFuntions/putfun';
-import { PostFun } from '../utils/genericFuntions/postfun';
-import { DeleteFun } from '../utils/genericFuntions/deletefun';
-import { GetByDates } from '../utils/genericFuntions/getByDates';
+import { GetFun } from '../utils/genericFuntions/getControllerHandler';
+import { GetIdFun } from '../utils/genericFuntions/getByIdControllerHandler';
+import { PutFun } from '../utils/genericFuntions/putControllerHandler';
+import { PostFun } from '../utils/genericFuntions/postControllerHandler';
+import { DeleteFun } from '../utils/genericFuntions/deleteControllerHandler';
+import { GetByDates } from '../utils/genericFuntions/getByDatesControllerHandler';
 
 /**
  * @swagger
@@ -169,10 +169,10 @@ import { GetByDates } from '../utils/genericFuntions/getByDates';
  *         id:
  *           type: integer
  *           example: 1
- *         room_number:
+ *         number:
  *           type: string
  *           example: "R001"
- *         room_type:
+ *         type:
  *           type: string
  *           example: "Suite"
  *         amenities:

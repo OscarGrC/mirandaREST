@@ -3,11 +3,11 @@ import { Router } from 'express';
 import { ContactArchivedService } from '../services/contactArchivedService';
 import { ContactValidator } from '../validators/contactValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-import { GetFun } from '../utils/genericFuntions/getfun';
-import { GetIdFun } from '../utils/genericFuntions/getIdfun';
-import { PutFun } from '../utils/genericFuntions/putfun';
-import { PostFun } from '../utils/genericFuntions/postfun';
-import { DeleteFun } from '../utils/genericFuntions/deletefun';
+import { GetFun } from '../utils/genericFuntions/getControllerHandler';
+import { GetIdFun } from '../utils/genericFuntions/getByIdControllerHandler';
+import { PutFun } from '../utils/genericFuntions/putControllerHandler';
+import { PostFun } from '../utils/genericFuntions/postControllerHandler';
+import { DeleteFun } from '../utils/genericFuntions/deleteControllerHandler';
 
 /**
  * @swagger
@@ -254,15 +254,17 @@ const contactArchivedservice = new ContactArchivedService()
 const baseUrl = ''
 const baseUrl2 = '/archived'
 
+contactRouter.get(baseUrl2, authenticateJWT, GetFun(contactArchivedservice));
+contactRouter.get(baseUrl2 + '/:id', authenticateJWT, GetIdFun(contactArchivedservice, "Contact"));
+contactRouter.post(baseUrl2, authenticateJWT, PostFun(contactArchivedservice, ContactValidator))
+contactRouter.put(baseUrl2 + '/:id', authenticateJWT, PutFun(contactArchivedservice, ContactValidator, "Contact"))
+contactRouter.delete(baseUrl2 + '/:id', authenticateJWT, DeleteFun(contactArchivedservice, "Contact"))
+
 contactRouter.get(baseUrl, authenticateJWT, GetFun(contactservice));
 contactRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(contactservice, "Contact"));
 contactRouter.post(baseUrl, authenticateJWT, PostFun(contactservice, ContactValidator))
 contactRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(contactservice, ContactValidator, "Contact"))
 contactRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(contactservice, "Contact"))
 
-contactRouter.get(baseUrl2, GetFun(contactArchivedservice));
-contactRouter.get(baseUrl2 + '/:id', authenticateJWT, GetIdFun(contactArchivedservice, "Contact"));
-contactRouter.post(baseUrl2, authenticateJWT, PostFun(contactArchivedservice, ContactValidator))
-contactRouter.put(baseUrl2 + '/:id', authenticateJWT, PutFun(contactArchivedservice, ContactValidator, "Contact"))
-contactRouter.delete(baseUrl2 + '/:id', authenticateJWT, DeleteFun(contactArchivedservice, "Contact"))
+
 
