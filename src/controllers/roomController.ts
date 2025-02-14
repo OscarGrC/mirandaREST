@@ -2,12 +2,12 @@ import { RoomService } from '../services/roomService';
 import { NextFunction, Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-import { GetFun } from '../utils/genericFuntions/getControllerHandler';
-import { GetIdFun } from '../utils/genericFuntions/getByIdControllerHandler';
-import { PutFun } from '../utils/genericFuntions/putControllerHandler';
-import { PostFun } from '../utils/genericFuntions/postControllerHandler';
-import { DeleteFun } from '../utils/genericFuntions/deleteControllerHandler';
-import { GetByDates } from '../utils/genericFuntions/getByDatesControllerHandler';
+import { GetFun } from '../utils/genericFunctions/getControllerHandler';
+import { GetIdFun } from '../utils/genericFunctions/getByIdControllerHandler';
+import { PutFun } from '../utils/genericFunctions/putControllerHandler';
+import { PostFun } from '../utils/genericFunctions/postControllerHandler';
+import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
+import { GetByDates } from '../utils/genericFunctions/getByDatesControllerHandler';
 
 /**
  * @swagger

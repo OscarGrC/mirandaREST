@@ -2,11 +2,11 @@ import { UserService } from '../services/userService';
 import { Router } from 'express';
 import { UserValidator } from '../validators/userValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
-import { GetFun } from '../utils/genericFuntions/getControllerHandler';
-import { GetIdFun } from '../utils/genericFuntions/getByIdControllerHandler';
-import { PutFun } from '../utils/genericFuntions/putControllerHandler';
-import { PostFun } from '../utils/genericFuntions/postControllerHandler';
-import { DeleteFun } from '../utils/genericFuntions/deleteControllerHandler';
+import { GetFun } from '../utils/genericFunctions/getControllerHandler';
+import { GetIdFun } from '../utils/genericFunctions/getByIdControllerHandler';
+import { PutFun } from '../utils/genericFunctions/putControllerHandler';
+import { PostFun } from '../utils/genericFunctions/postControllerHandler';
+import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
 
 /**
  * @swagger
