@@ -10,7 +10,7 @@ export function PutFun<T>(service: ServiceInterface<T>, validator: any, messageT
         }
 
         try {
-            const updatedItem = await service.update(parseInt(req.params.id), req.body);
+            const updatedItem = await service.update(req.params.id, req.body);
             if (updatedItem) {
                 res.status(200).json(updatedItem);
             } else {

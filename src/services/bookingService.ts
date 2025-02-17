@@ -1,42 +1,28 @@
-import { BookingInterface } from "../interfaces/bookingInterface";
-import bookingData from "../data/booking.json";
+import BookingModel from "../models/Booking";
+import { BookingMongoInterface } from "../interfaces/mongoInterfaces/bookingMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class BookingService implements ServiceInterface<BookingInterface> {
-    private bookings: BookingInterface[] = bookingData as BookingInterface[];
+export class BookingService implements ServiceInterface<BookingMongoInterface> {
 
-    fetchAll(): BookingInterface[] {
-        return this.bookings;
+    async fetchAll(): Promise<BookingMongoInterface[]> {
+        return await BookingModel.find();
     }
 
-    fetchById(id: number): BookingInterface | undefined {
-        return this.bookings.find((booking) => booking.guest.id === id);
+    async fetchById(id: string): Promise<BookingMongoInterface | null> {
+        return await BookingModel.findById(id);
     }
 
-    create(booking: BookingInterface): BookingInterface {
-        const newBooking = { ...booking, id: this.bookings.length + 1 };
-        this.bookings.push(newBooking);
-        return newBooking;
+    async create(booking: BookingMongoInterface): Promise<BookingMongoInterface> {
+        const newBooking = new BookingModel(booking);
+        return await newBooking.save();
     }
 
-    update(id: number, booking: BookingInterface): BookingInterface | null {
-        const bookingToUpdate = this.bookings.filter((booking) => booking.guest.id === id);
-        if (bookingToUpdate.length > 0) {
-            const updatedbooking = { ...bookingToUpdate[0], ...booking };
-            const finalList = this.bookings.filter((booking) => booking.guest.id !== id);
-            finalList.push(updatedbooking);
-            this.bookings = finalList;
-            return updatedbooking;
-        }
-        return null;
+    async update(id: string, booking: Partial<BookingMongoInterface>): Promise<BookingMongoInterface | null> {
+        return await BookingModel.findByIdAndUpdate(id, booking, { new: true });
     }
 
-    delete(id: number): boolean {
-        const bookingToDelete = this.bookings.filter((booking) => booking.guest.id === id);
-        if (bookingToDelete.length > 0) {
-            this.bookings = this.bookings.filter((booking) => booking.guest.id !== id);
-            return true;
-        }
-        return false;
+    async delete(id: string): Promise<boolean> {
+        const deletedBooking = await BookingModel.findByIdAndDelete(id);
+        return !!deletedBooking;
     }
 }

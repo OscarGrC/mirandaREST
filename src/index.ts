@@ -6,6 +6,7 @@ import { bookingRouter } from './controllers/bookingController';
 import { roomRouter } from './controllers/roomController';
 import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
+import { connectMongoDB } from './database/connectMongoDB'
 /**
  * @swagger
  * /api/v1/login:
@@ -81,7 +82,11 @@ app.get('/live', (req: Request, res: Response) => {
 
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+connectMongoDB()
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+

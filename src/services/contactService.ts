@@ -1,42 +1,28 @@
-import { ContactInterface } from "../interfaces/contactInterface";
-import contactData from "../data/contact.json";
+import ContactModel from "../models/Contact";
+import { ContactMongoInterface } from "../interfaces/mongoInterfaces/contactMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class ContactService implements ServiceInterface<ContactInterface> {
-    private contact: ContactInterface[] = contactData as ContactInterface[];
+export class ContactService implements ServiceInterface<ContactMongoInterface> {
 
-    fetchAll(): ContactInterface[] {
-        return this.contact;
+    async fetchAll(): Promise<ContactMongoInterface[]> {
+        return await ContactModel.find();
     }
 
-    fetchById(id: number): ContactInterface | undefined {
-        return this.contact.find((contact) => contact.id === id);
+    async fetchById(id: string): Promise<ContactMongoInterface | null> {
+        return await ContactModel.findById(id);
     }
 
-    create(contact: ContactInterface): ContactInterface {
-        const newcontact = { ...contact, id: this.contact.length + 1 };
-        this.contact.push(newcontact);
-        return newcontact;
+    async create(contact: ContactMongoInterface): Promise<ContactMongoInterface> {
+        const newContact = new ContactModel(contact);
+        return await newContact.save();
     }
 
-    update(id: number, contact: ContactInterface): ContactInterface | null {
-        const contactToUpdate = this.contact.filter((contactArchived) => contactArchived.id === id);
-        if (contactToUpdate.length > 0) {
-            const updatedcontact = { ...contactToUpdate[0], ...contact };
-            const finalList = this.contact.filter((contact) => contact.id !== id);
-            finalList.push(updatedcontact);
-            this.contact = finalList;
-            return updatedcontact;
-        }
-        return null;
+    async update(id: string, contact: Partial<ContactMongoInterface>): Promise<ContactMongoInterface | null> {
+        return await ContactModel.findByIdAndUpdate(id, contact, { new: true });
     }
 
-    delete(id: number): boolean {
-        const contactToDelete = this.contact.filter((contact) => contact.id === id);
-        if (contactToDelete.length > 0) {
-            this.contact = this.contact.filter((contact) => contact.id !== id);
-            return true;
-        }
-        return false;
+    async delete(id: string): Promise<boolean> {
+        const deletedContact = await ContactModel.findByIdAndDelete(id);
+        return !!deletedContact;
     }
 }

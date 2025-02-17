@@ -4,7 +4,7 @@ import { ServiceInterface } from '../../interfaces/serviceInterface';
 export function DeleteFun<T>(service: ServiceInterface<T>, messageType: string) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const deletedItem = service.delete(parseInt(req.params.id));
+            const deletedItem = await service.delete(req.params.id);
 
             if (deletedItem) {
                 res.status(200).json({ message: `${messageType} deleted` });
