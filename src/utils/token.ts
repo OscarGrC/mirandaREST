@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import bcrypt from 'bcrypt';
 
 export const signToken = (email: string, password: string) => {
     const token = jwt.sign({
@@ -17,4 +18,9 @@ export const verifyToken = (token: string) => {
     } catch (error) {
         return false
     }
+}
+export const generateHash = async (password: string): Promise<string> => {
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(password, saltRounds);
+    return hash;
 }

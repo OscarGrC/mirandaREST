@@ -9,7 +9,7 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
         res.status(401).json({ message: 'Acceso denegado, token no proporcionado' });
     } else {
         try {
-            jwt.verify(token, 'Volveran las oscuras golondriñas');
+            jwt.verify(token, process.env.TOKEN_SECRET || "undefined");
             next();
         } catch (error) {
             res.status(403).json({ message: 'Token inválido o expirado' });
