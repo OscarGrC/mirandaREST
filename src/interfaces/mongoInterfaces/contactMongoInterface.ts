@@ -3,7 +3,7 @@ import { CustomerMongoInterface } from "./customerMongoInterface";
 
 export interface ContactMongoInterface extends Document {
     date: string;
-    customer: CustomerMongoInterface;
+    customer: Partial<CustomerMongoInterface>;
     asunto: string;
     comment: string;
 }

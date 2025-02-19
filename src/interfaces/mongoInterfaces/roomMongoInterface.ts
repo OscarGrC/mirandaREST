@@ -1,8 +1,9 @@
 import { Document } from "mongoose";
+import { RoomType } from "../roomTypeEnum"
 
 export interface RoomMongoInterface extends Document {
     number: string;
-    type: string;
+    type: RoomType;
     amenities: number[];
     price: number;
     offert_price: number;
