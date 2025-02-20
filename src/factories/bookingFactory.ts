@@ -28,22 +28,6 @@ export class BookingFactory {
         "Decoración especial por aniversario"
     ];
 
-
-
-    private generateRoom(): Partial<RoomMongoInterface> {
-        const type: RoomType = faker.helpers.arrayElement(Object.values(RoomType));
-
-        let roomNumber = `R${this.lastRoomNumber}`;
-        if (this.lastRoomNumber % 100 === 20) {
-            this.lastRoomNumber += 81;
-        } else {
-            this.lastRoomNumber++;
-        }
-
-        return { type: type as RoomType, number: roomNumber };
-    }
-
-
     private randomDateRange(): { order_date: string; check_in: string; check_out: string } {
         const today = new Date();
         const checkInDate = new Date(today);
@@ -71,14 +55,17 @@ export class BookingFactory {
         };
     }
 
-    async create(): Promise<Partial<BookingMongoInterface>> {
+    async create(room: RoomMongoInterface): Promise<Partial<BookingMongoInterface>> {
         const { order_date, check_in, check_out } = this.randomDateRange();
         return {
             guest: this.createCustomer(),
             order_date,
             check_in,
             check_out,
-            room: this.generateRoom(),
+            room: {
+                type: room.type,
+                number: room.number
+            },
             special_request: faker.helpers.arrayElement(this.specialRequests),
         };
     }

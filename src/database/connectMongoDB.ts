@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/Miranda";
+import * as dotenv from "dotenv";
 
 export const connectMongoDB = async () => {
+    dotenv.config();
     try {
-        await mongoose.connect(MONGO_URI, {} as any);
+        await mongoose.connect(process.env.MONGO_URI || "fallo");
         console.log("🟢 Conectado a MongoDB");
     } catch (error) {
         console.error("🔴 Error conectando a MongoDB:", error);

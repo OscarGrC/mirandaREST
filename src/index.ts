@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
-
-import dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import { loginRouter } from './controllers/loginController';
 import { bookingRouter } from './controllers/bookingController';
 import { roomRouter } from './controllers/roomController';
@@ -45,7 +44,6 @@ import { connectMongoDB } from './database/connectMongoDB'
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-
 dotenv.config();
 const app = express();
 const port = 3000;
