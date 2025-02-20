@@ -1,8 +1,6 @@
 import { Request, Response, Router } from 'express';
-import users from '../data/users.json';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { UserInterface } from '../interfaces/userInterface';
+import { UserService } from '../services/userService';
 import { signToken } from '../utils/token'
 
 /**
@@ -44,23 +42,28 @@ import { signToken } from '../utils/token'
 
 export const loginRouter = Router();
 
-loginRouter.post('', (req: Request, res: Response) => {
+loginRouter.post('', async (req: Request, res: Response): Promise<any> => {
     const { email, password } = req.body;
+    const userService = new UserService();
 
-    const user: UserInterface[] = users.filter(u => u.email === email);
-    if (user.length === 0) {
-        res.status(404).send('Usuario no encontrado');
+    try {
+        const users = await userService.fetchAll();
+        const foundUser = users.find(u => u.email === email);
+
+        if (!foundUser) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const validPassword = bcrypt.compare(password, foundUser.password);
+        if (!validPassword) {
+            return res.status(400).send('Contraseña incorrecta');
+        }
+
+        const token = signToken(foundUser.email, foundUser.password);
+        return res.status(200).send({ token });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Error en el servidor');
     }
-    const validPassword = bcrypt.compare(password, user[0].password).then((result) => {
-        if (result === false) {
-            res.status(400).send({ token: "Contraseña incorrecta" });
-        }
-        else {
-            const token = signToken(email, password)
-            res.status(200).send({ token: token });
-        }
-    });
-
-
-
-}); 
+});

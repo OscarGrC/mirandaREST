@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
-
-import dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import { loginRouter } from './controllers/loginController';
 import { bookingRouter } from './controllers/bookingController';
 import { roomRouter } from './controllers/roomController';
 import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
+import { connectMongoDB } from './database/connectMongoDB'
 /**
  * @swagger
  * /api/v1/login:
@@ -44,7 +44,6 @@ import { userRouter } from './controllers/userController';
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-
 dotenv.config();
 const app = express();
 const port = 3000;
@@ -81,7 +80,11 @@ app.get('/live', (req: Request, res: Response) => {
 
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+connectMongoDB()
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+

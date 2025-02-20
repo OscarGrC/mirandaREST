@@ -4,7 +4,7 @@ import { ServiceInterface } from '../../interfaces/serviceInterface';
 export function GetFun<T>(service: ServiceInterface<T>) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const data = service.fetchAll();
+            const data = await service.fetchAll();
             res.json(data);
         } catch (error) {
             next(error);

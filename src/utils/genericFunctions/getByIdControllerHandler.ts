@@ -3,7 +3,7 @@ import { ServiceInterface } from '../../interfaces/serviceInterface';
 
 export function GetIdFun<T>(service: ServiceInterface<T>, messageType: string) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
         try {
             const data = await service.fetchById(id);
             if (data) {
