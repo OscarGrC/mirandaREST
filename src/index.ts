@@ -6,6 +6,7 @@ import { roomRouter } from './controllers/roomController';
 import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
 import { connectMongoDB } from './database/connectMongoDB'
+import serverless from 'serverless-http';
 /**
  * @swagger
  * /api/v1/login:
@@ -46,7 +47,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 dotenv.config();
 const app = express();
-const port = 3000;
+const port = 3002;
 
 const swaggerOptions = {
     definition: {
@@ -58,7 +59,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'http://localhost:3000',
+                url: 'http://localhost:3002',
             },
         ],
     },
@@ -85,6 +86,8 @@ connectMongoDB()
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+// module.exports.handler = serverless(app)
 
 
 

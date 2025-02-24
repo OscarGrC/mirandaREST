@@ -4,9 +4,6 @@ export class RoomValidator {
     static validate(room: RoomInterface): { valid: boolean; errors: string[] } {
         const errors: string[] = [];
 
-        if (!room.id || room.id <= 0) {
-            errors.push("El ID de la habitación debe ser un número positivo.");
-        }
         if (!room.number || room.number.trim() === "") {
             errors.push("El número de habitación no puede estar vacío.");
         }

@@ -10,7 +10,7 @@ import BookingModel from './src/models/booking';
 import mongoose from 'mongoose';
 
 
-async function main() {
+const main = async () => {
     await connectMongoDB();
     //Rooms & Booking
     const roomFactory = RoomFactory.getInstance();

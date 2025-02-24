@@ -21,6 +21,8 @@
     "jsonwebtoken": "^9.0.2",
     "mirandarest": "file:",
     "mongoose": "^8.10.1",
+    "serverless": "^4.6.3",
+    "serverless-http": "^3.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

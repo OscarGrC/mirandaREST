@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { ServiceInterface } from '../../interfaces/serviceInterface';
 import { RoomServiceInterface } from '../../interfaces/serviceRoomInterface';
 
 export function GetByDates<T>(service: RoomServiceInterface<T>) {
