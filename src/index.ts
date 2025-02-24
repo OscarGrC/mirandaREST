@@ -46,6 +46,7 @@ import serverless from 'serverless-http';
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 dotenv.config();
+const cors = require('cors')
 const app = express();
 const port = 3002;
 
@@ -65,7 +66,7 @@ const swaggerOptions = {
     },
     apis: ['./src/controllers/*.ts'],
 };
-
+app.use(cors())
 app.use(express.json());
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/bookings", bookingRouter);
