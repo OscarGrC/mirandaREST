@@ -1,5 +1,5 @@
 export interface RoomInterface {
-    id: number;
+    id: string;
     number: string;
     type: string;
     amenities: number[];

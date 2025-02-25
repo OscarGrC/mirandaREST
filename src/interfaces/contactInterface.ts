@@ -2,7 +2,7 @@ import { ContactCustomerInterface } from "./contactCustomerInterface";
 
 export interface ContactInterface {
     date: string;
-    id: number;
+    id: string;
     customer: ContactCustomerInterface;
     asunto: string;
     comment: string;

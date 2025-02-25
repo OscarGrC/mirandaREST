@@ -1,28 +1,28 @@
-import ContactModel from "../models/Contact";
+import ContactArchivedModel from "../models/contactArchived";
 import { ContactMongoInterface } from "../interfaces/mongoInterfaces/contactMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
 export class ContactArchivedService implements ServiceInterface<ContactMongoInterface> {
 
     async fetchAll(): Promise<ContactMongoInterface[]> {
-        return await ContactModel.find();
+        return await ContactArchivedModel.find();
     }
 
     async fetchById(id: string): Promise<ContactMongoInterface | null> {
-        return await ContactModel.findById(id);
+        return await ContactArchivedModel.findById(id);
     }
 
     async create(contact: ContactMongoInterface): Promise<ContactMongoInterface> {
-        const newContact = new ContactModel(contact);
+        const newContact = new ContactArchivedModel(contact);
         return await newContact.save();
     }
 
     async update(id: string, contact: Partial<ContactMongoInterface>): Promise<ContactMongoInterface | null> {
-        return await ContactModel.findByIdAndUpdate(id, contact, { new: true });
+        return await ContactArchivedModel.findByIdAndUpdate(id, contact, { new: true });
     }
 
     async delete(id: string): Promise<boolean> {
-        const deletedContact = await ContactModel.findByIdAndDelete(id);
+        const deletedContact = await ContactArchivedModel.findByIdAndDelete(id);
         return !!deletedContact;
     }
 }

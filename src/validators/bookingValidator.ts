@@ -8,9 +8,7 @@ export class BookingValidator {
             errors.push("El huésped debe tener un nombre y apellido.");
         }
 
-        if (!booking.guest.id || booking.guest.id <= 0) {
-            errors.push("El ID del huésped debe ser un número positivo.");
-        }
+
 
         if (!booking.room || !booking.room.type || !booking.room.number) {
             errors.push("La habitación debe tener un tipo y un número válidos.");

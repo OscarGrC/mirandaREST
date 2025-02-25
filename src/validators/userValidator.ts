@@ -4,10 +4,6 @@ export class UserValidator {
     static validate(user: UserInterface): { valid: boolean; errors: string[] } {
         const errors: string[] = [];
 
-        if (!user.id || user.id <= 0) {
-            errors.push("El ID del usuario debe ser un número positivo.");
-        }
-
         /*
            const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
            if (!user.photo || !urlRegex.test(user.photo)) {
