@@ -58,9 +58,9 @@ loginRouter.post('', async (req: Request, res: Response): Promise<any> => {
         if (!validPassword) {
             return res.status(400).send('Contraseña incorrecta');
         }
-
+        const user = { name: foundUser.fullName, email: foundUser.email }
         const token = signToken(foundUser.email, foundUser.password);
-        return res.status(200).send({ token });
+        return res.status(200).send({ token, user });
 
     } catch (error) {
         console.error(error);
