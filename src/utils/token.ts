@@ -6,7 +6,7 @@ export const signToken = (email: string, password: string) => {
         email,
         password
     }, process.env.TOKEN_SECRET || "undefined", {
-        expiresIn: "1w"
+        expiresIn: "1d"
     })
     return token;
 }
