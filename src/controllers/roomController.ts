@@ -1,4 +1,4 @@
-import { RoomService } from '../services/roomService';
+import { RoomServiceSQL } from '../services/roomServiceSQL';
 import { NextFunction, Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -205,12 +205,12 @@ import { GetByDates } from '../utils/genericFunctions/getByDatesControllerHandle
  *           example: ["https://urlfoto1.com", "https://urlfoto2.com", "https://urlfoto3.com"]
  */
 export const roomRouter = Router();
-const roomservice = new RoomService();
+const service = new RoomServiceSQL();
 
-roomRouter.get("/", authenticateJWT, GetFun(roomservice));
-roomRouter.get("/:id", authenticateJWT, GetIdFun(roomservice, "Room"));
-roomRouter.post("/", authenticateJWT, PostFun(roomservice, RoomValidator));
-roomRouter.put("/:id", authenticateJWT, PutFun(roomservice, RoomValidator, "Room"));
-roomRouter.delete("/:id", authenticateJWT, DeleteFun(roomservice, "Room"));
+roomRouter.get("/", authenticateJWT, GetFun(service));
+roomRouter.get("/:id", authenticateJWT, GetIdFun(service, "Room"));
+roomRouter.post("/", authenticateJWT, PostFun(service, RoomValidator));
+roomRouter.put("/:id", authenticateJWT, PutFun(service, RoomValidator, "Room"));
+roomRouter.delete("/:id", authenticateJWT, DeleteFun(service, "Room"));
 
-roomRouter.post("/filter", authenticateJWT, GetByDates(roomservice));
+roomRouter.post("/filter", authenticateJWT, GetByDates(service));

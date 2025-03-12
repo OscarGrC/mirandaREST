@@ -1,8 +1,8 @@
 import RoomModel from "../models/Room";
 import { RoomMongoInterface } from "../interfaces/mongoInterfaces/roomMongoInterface";
-import { RoomServiceInterface } from "../interfaces/serviceRoomInterface";
+import { RoomServiceMongoInterface } from "../interfaces/serviceRoomInterface";
 
-export class RoomService implements RoomServiceInterface<RoomMongoInterface> {
+export class RoomServiceMongo implements RoomServiceMongoInterface<RoomMongoInterface> {
 
     async fetchAll(): Promise<RoomMongoInterface[]> {
         return await RoomModel.find();

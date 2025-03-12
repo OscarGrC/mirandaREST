@@ -6,7 +6,7 @@ import { roomRouter } from './controllers/roomController';
 import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
 import { connectMongoDB } from './database/connectMongoDB'
-import serverless from 'serverless-http';
+import { connectMySQL } from './database/connectSQL'
 /**
  * @swagger
  * /api/v1/login:
@@ -82,8 +82,8 @@ app.get('/live', (req: Request, res: Response) => {
 
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-connectMongoDB()
-
+//connectMongoDB()
+connectMySQL()
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

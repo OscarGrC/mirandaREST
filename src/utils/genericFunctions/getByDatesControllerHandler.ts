@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { RoomServiceInterface } from '../../interfaces/serviceRoomInterface';
+import { RoomServiceMongoInterface } from '../../interfaces/serviceRoomInterface';
 
-export function GetByDates<T>(service: RoomServiceInterface<T>) {
+export function GetByDates<T>(service: RoomServiceMongoInterface<T>) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { check_in, check_out } = req.body;

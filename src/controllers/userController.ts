@@ -1,4 +1,4 @@
-import { UserService } from '../services/userService';
+import { UserServiceSQL } from '../services/userServiceSQL';
 import { Router } from 'express';
 import { UserValidator } from '../validators/userValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -158,11 +158,11 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  */
 
 export const userRouter = Router();
-const userService = new UserService();
+const service = new UserServiceSQL();
 const baseUrl = ''
 
-userRouter.get(baseUrl, authenticateJWT, GetFun(userService));
-userRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(userService, "User"));
-userRouter.post(baseUrl, authenticateJWT, PostFun(userService, UserValidator))
-userRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(userService, UserValidator, "User"))
-userRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(userService, "User"))
+userRouter.get(baseUrl, authenticateJWT, GetFun(service));
+userRouter.get(baseUrl + '/:id', authenticateJWT, GetIdFun(service, "User"));
+userRouter.post(baseUrl, authenticateJWT, PostFun(service, UserValidator))
+userRouter.put(baseUrl + '/:id', authenticateJWT, PutFun(service, UserValidator, "User"))
+userRouter.delete(baseUrl + '/:id', authenticateJWT, DeleteFun(service, "User"))

@@ -2,7 +2,7 @@ import ContactArchivedModel from "../models/contactArchived";
 import { ContactMongoInterface } from "../interfaces/mongoInterfaces/contactMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class ContactArchivedService implements ServiceInterface<ContactMongoInterface> {
+export class ContactArchivedServiceMongo implements ServiceInterface<ContactMongoInterface> {
 
     async fetchAll(): Promise<ContactMongoInterface[]> {
         return await ContactArchivedModel.find();

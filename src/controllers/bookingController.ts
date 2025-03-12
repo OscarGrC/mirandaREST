@@ -1,4 +1,4 @@
-import { BookingService } from '../services/bookingService';
+import { BookingServiceSQL } from '../services/bookingServiceSQL';
 import { Router } from 'express';
 import { BookingValidator } from '../validators/bookingValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -153,13 +153,13 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  */
 
 export const bookingRouter = Router();
-const bookingservice = new BookingService();
+const service = new BookingServiceSQL();
 const baseUrl: string = '/';
 
-bookingRouter.get(baseUrl, authenticateJWT, GetFun(bookingservice));
-bookingRouter.get(baseUrl + ':id', authenticateJWT, GetIdFun(bookingservice, "Booking"));
-bookingRouter.post(baseUrl, authenticateJWT, PostFun(bookingservice, BookingValidator));
-bookingRouter.put(baseUrl + ':id', authenticateJWT, PutFun(bookingservice, BookingValidator, "Booking"));
-bookingRouter.delete(baseUrl + ':id', authenticateJWT, DeleteFun(bookingservice, "Booking"));
+bookingRouter.get(baseUrl, authenticateJWT, GetFun(service));
+bookingRouter.get(baseUrl + ':id', authenticateJWT, GetIdFun(service, "Booking"));
+bookingRouter.post(baseUrl, authenticateJWT, PostFun(service, BookingValidator));
+bookingRouter.put(baseUrl + ':id', authenticateJWT, PutFun(service, BookingValidator, "Booking"));
+bookingRouter.delete(baseUrl + ':id', authenticateJWT, DeleteFun(service, "Booking"));
 
 

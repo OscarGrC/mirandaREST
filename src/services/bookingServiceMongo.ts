@@ -2,7 +2,7 @@ import BookingModel from "../models/Booking";
 import { BookingMongoInterface } from "../interfaces/mongoInterfaces/bookingMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class BookingService implements ServiceInterface<BookingMongoInterface> {
+export class BookingServiceMongo implements ServiceInterface<BookingMongoInterface> {
 
     async fetchAll(): Promise<BookingMongoInterface[]> {
         return await BookingModel.find();

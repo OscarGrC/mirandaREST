@@ -2,7 +2,7 @@ import UserModel from "../models/User";
 import { UserMongoInterface } from "../interfaces/mongoInterfaces/userMongoInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 
-export class UserService implements ServiceInterface<UserMongoInterface> {
+export class UserServiceMongo implements ServiceInterface<UserMongoInterface> {
 
     async fetchAll(): Promise<UserMongoInterface[]> {
         return await UserModel.find();

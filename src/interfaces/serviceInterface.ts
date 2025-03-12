@@ -1,7 +1,7 @@
 export interface ServiceInterface<T> {
     fetchAll(): Promise<T[]>;
-    fetchById(id: string): Promise<T | null>;
+    fetchById(id: number): Promise<T | null>;
     create(item: T): Promise<T>;
-    update(id: string, item: T): Promise<T | null>;
-    delete(id: string): Promise<boolean>;
+    update(id: number, item: T): Promise<T | null>;
+    delete(id: number): Promise<boolean>;
 }
