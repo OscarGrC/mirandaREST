@@ -7,6 +7,7 @@ import { contactRouter } from './controllers/contactController';
 import { userRouter } from './controllers/userController';
 import { connectMongoDB } from './database/connectMongoDB'
 import { connectMySQL } from './database/connectSQL'
+import { generateHash } from './utils/token';
 /**
  * @swagger
  * /api/v1/login:
@@ -82,6 +83,9 @@ app.get('/live', (req: Request, res: Response) => {
 
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+
+
+
 //connectMongoDB()
 connectMySQL()
 app.listen(port, () => {
@@ -89,6 +93,5 @@ app.listen(port, () => {
 });
 
 // module.exports.handler = serverless(app)
-
 
 

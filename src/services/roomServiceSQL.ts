@@ -117,4 +117,11 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
             throw error;
         }
     }
+    async fetchByDate(check_in: string, check_out: string): Promise<RoomSQLInterface[]> {
+        return new Promise((resolve, reject) => {
+
+            const rooms: RoomSQLInterface[] = [];
+            resolve(rooms);
+        });
+    }
 }
