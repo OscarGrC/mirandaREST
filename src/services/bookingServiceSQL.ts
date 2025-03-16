@@ -1,12 +1,14 @@
 import { BookingSQLInterface } from "../interfaces/sqlInterfaces/BookingSQLInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 import { BookingModelMysql } from "../models/sql/bookingSql";
+import { BookingInterface } from "../interfaces/bookingInterface"
+import { toDefaultBooking, toSQLBooking } from "../DTO/booking"
 
-export class BookingServiceSQL implements ServiceInterface<BookingSQLInterface> {
-    async fetchAll(): Promise<BookingSQLInterface[]> {
+export class BookingServiceSQL implements ServiceInterface<BookingInterface> {
+    async fetchAll(): Promise<BookingInterface[]> {
         try {
             const bookings: BookingSQLInterface[] = await BookingModelMysql.findAll();
-            return bookings;
+            return bookings.map(booking => toDefaultBooking(booking));
         }
         catch (error) {
             console.error('Error in fetchAll of bookingService', error);
@@ -14,10 +16,10 @@ export class BookingServiceSQL implements ServiceInterface<BookingSQLInterface> 
         }
     }
 
-    async fetchById(id: number): Promise<BookingSQLInterface | null> {
+    async fetchById(id: number): Promise<BookingInterface | null> {
         try {
             const booking: BookingSQLInterface | null = await BookingModelMysql.findByPk(id);
-            if (booking !== null) return booking;
+            if (booking !== null) return toDefaultBooking(booking);
             else throw new Error('Booking not found');
         }
         catch (error) {
@@ -26,22 +28,25 @@ export class BookingServiceSQL implements ServiceInterface<BookingSQLInterface> 
         }
     }
 
-    async create(booking: BookingSQLInterface): Promise<BookingSQLInterface> {
+    async create(booking: BookingInterface): Promise<BookingInterface> {
         try {
+
+            const sqlBooking: BookingSQLInterface = toSQLBooking(booking);
+
             const newBooking: BookingSQLInterface = await BookingModelMysql.create({
-                guest_name: booking.guest_name,
-                guest_lastname: booking.guest_lastname,
-                guest_email: booking.guest_email,
-                guest_phone: booking.guest_phone,
-                order_date: booking.order_date,
-                check_in: booking.check_in,
-                check_out: booking.check_out,
-                room_type: booking.room_type,
-                room_number: booking.room_number,
-                special_request: booking.special_request
+                guest_name: sqlBooking.guest_name,
+                guest_lastname: sqlBooking.guest_lastname,
+                guest_email: sqlBooking.guest_email,
+                guest_phone: sqlBooking.guest_phone,
+                order_date: sqlBooking.order_date,
+                check_in: sqlBooking.check_in,
+                check_out: sqlBooking.check_out,
+                room_type: sqlBooking.room_type,
+                room_number: sqlBooking.room_number,
+                special_request: sqlBooking.special_request
             });
 
-            return newBooking;
+            return toDefaultBooking(newBooking);
         }
         catch (error) {
             console.error('Error in create of bookingService', error);
@@ -49,33 +54,35 @@ export class BookingServiceSQL implements ServiceInterface<BookingSQLInterface> 
         }
     }
 
-    async update(id: number, booking: BookingSQLInterface): Promise<BookingSQLInterface | null> {
+    async update(id: number, booking: BookingInterface): Promise<BookingInterface | null> {
         try {
-            const existingBooking: BookingSQLInterface | null = await this.fetchById(id);
+            const existingBooking: BookingInterface | null = await this.fetchById(id);
             if (existingBooking == null) return null;
 
+            const sqlBooking: BookingSQLInterface = toSQLBooking(booking);
+
             const [updatedBooking] = await BookingModelMysql.update({
-                guest_name: booking.guest_name,
-                guest_lastname: booking.guest_lastname,
-                guest_email: booking.guest_email,
-                guest_phone: booking.guest_phone,
-                order_date: booking.order_date,
-                check_in: booking.check_in,
-                check_out: booking.check_out,
-                room_type: booking.room_type,
-                room_number: booking.room_number,
-                special_request: booking.special_request
+                guest_name: sqlBooking.guest_name,
+                guest_lastname: sqlBooking.guest_lastname,
+                guest_email: sqlBooking.guest_email,
+                guest_phone: sqlBooking.guest_phone,
+                order_date: sqlBooking.order_date,
+                check_in: sqlBooking.check_in,
+                check_out: sqlBooking.check_out,
+                room_type: sqlBooking.room_type,
+                room_number: sqlBooking.room_number,
+                special_request: sqlBooking.special_request
             }, { where: { id } });
 
             if (updatedBooking === 0) return null;
 
             return await this.fetchById(id);
-        }
-        catch (error) {
+        } catch (error) {
             console.error('Error in update of bookingService', error);
             throw error;
         }
     }
+
 
     async delete(id: number): Promise<boolean> {
         try {
