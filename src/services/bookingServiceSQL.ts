@@ -30,9 +30,7 @@ export class BookingServiceSQL implements ServiceInterface<BookingInterface> {
 
     async create(booking: BookingInterface): Promise<BookingInterface> {
         try {
-
             const sqlBooking: BookingSQLInterface = toSQLBooking(booking);
-
             const newBooking: BookingSQLInterface = await BookingModelMysql.create({
                 guest_name: sqlBooking.guest_name,
                 guest_lastname: sqlBooking.guest_lastname,
@@ -82,7 +80,6 @@ export class BookingServiceSQL implements ServiceInterface<BookingInterface> {
             throw error;
         }
     }
-
 
     async delete(id: number): Promise<boolean> {
         try {

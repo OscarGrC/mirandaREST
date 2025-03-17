@@ -1,13 +1,15 @@
 import { ContactSQLInterface } from "../interfaces/sqlInterfaces/ContactSQLInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 import { ContactModelMysql } from "../models/sql/contactSql";
+import { ContactInterface } from "../interfaces/contactInterface";
+import { toDefaultContact, toSQLContact } from "../DTO/contact";
 
-export class ContactServiceMysql implements ServiceInterface<ContactSQLInterface> {
+export class ContactServiceMysql implements ServiceInterface<ContactInterface> {
 
-    async fetchAll(): Promise<ContactSQLInterface[]> {
+    async fetchAll(): Promise<ContactInterface[]> {
         try {
             const contacts: ContactSQLInterface[] = await ContactModelMysql.findAll()
-            return contacts
+            return contacts.map(contact => toDefaultContact(contact));
         }
         catch (error) {
             console.error('Error in fetchAll of contactService', error)
@@ -15,10 +17,12 @@ export class ContactServiceMysql implements ServiceInterface<ContactSQLInterface
         }
     }
 
-    async fetchById(id: number): Promise<ContactSQLInterface | null> {
+    async fetchById(id: number): Promise<ContactInterface | null> {
         try {
             const contact: ContactSQLInterface | null = await ContactModelMysql.findByPk(id)
-            if (contact) return contact
+            if (contact) {
+                return toDefaultContact(contact)
+            }
             else throw new Error('Contact not found')
         }
         catch (error) {
@@ -27,18 +31,18 @@ export class ContactServiceMysql implements ServiceInterface<ContactSQLInterface
         }
     }
 
-    async create(contact: ContactSQLInterface): Promise<ContactSQLInterface> {
+    async create(contact: ContactInterface): Promise<ContactInterface> {
         try {
             const newContact: ContactSQLInterface = await ContactModelMysql.create({
                 date: contact.date,
                 asunto: contact.asunto,
                 comment: contact.comment,
-                customer_name: contact.customer_name,
-                customer_lastname: contact.customer_lastname,
-                customer_email: contact.customer_email,
-                customer_phone: contact.customer_phone
+                customer_name: contact.customer.name,
+                customer_lastname: contact.customer.last_name,
+                customer_email: contact.customer.email,
+                customer_phone: contact.customer.phone
             })
-            return newContact
+            return toDefaultContact(newContact)
         }
         catch (error) {
             console.error('Error in create of contactService', error)
@@ -46,9 +50,9 @@ export class ContactServiceMysql implements ServiceInterface<ContactSQLInterface
         }
     }
 
-    async update(id: number, contact: ContactSQLInterface): Promise<ContactSQLInterface | null> {
+    async update(id: number, contact: ContactInterface): Promise<ContactInterface | null> {
         try {
-            const [updatedContact] = await ContactModelMysql.update(contact, { where: { id } })
+            const [updatedContact] = await ContactModelMysql.update(toSQLContact(contact), { where: { id } })
             if (updatedContact === 0) return null
 
             return await this.fetchById(id)

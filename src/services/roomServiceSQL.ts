@@ -1,9 +1,12 @@
 import { RoomSQLInterface } from "../interfaces/sqlInterfaces/RoomSQLInterface";
 import { ServiceInterface } from "../interfaces/serviceInterface";
 import { RoomModelMysql } from "../models/sql/roomSql";
+import { RoomInterface } from "../interfaces/roomInterface"
+import { toDefaultRoom, toSQLRoom } from "../DTO/room"
+import { RoomType } from "../interfaces/roomTypeEnum";
 
-export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
-    async fetchAll(): Promise<RoomSQLInterface[]> {
+export class RoomServiceSQL implements ServiceInterface<RoomInterface> {
+    async fetchAll(): Promise<RoomInterface[]> {
         try {
             const rooms: RoomSQLInterface[] = await RoomModelMysql.findAll();
             const roomsParsed = rooms.map(room => ({
@@ -19,7 +22,7 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
                 description: room.description,
                 photos: JSON.stringify(room.photos),
             }));
-            return roomsParsed;
+            return roomsParsed.map(room => toDefaultRoom(room));
         }
         catch (error) {
             console.error('Error in fetchAll of roomService', error);
@@ -27,7 +30,7 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
         }
     }
 
-    async fetchById(id: number): Promise<RoomSQLInterface | null> {
+    async fetchById(id: number): Promise<RoomInterface | null> {
         try {
             const room: RoomSQLInterface | null = await RoomModelMysql.findByPk(id);
             if (room !== null) {
@@ -44,7 +47,7 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
                     description: room.description,
                     photos: JSON.stringify(room.photos)
                 };
-                return roomParsed;
+                return toDefaultRoom(roomParsed);
             }
             else throw new Error('Room not found');
         }
@@ -54,22 +57,13 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
         }
     }
 
-    async create(room: RoomSQLInterface): Promise<RoomSQLInterface> {
+    async create(room: RoomInterface): Promise<RoomInterface> {
         try {
-            const newRoom: RoomSQLInterface = await RoomModelMysql.create({
-                number: room.number,
-                type: room.type,
-                amenities: typeof room.amenities === 'string' ? room.amenities : JSON.stringify(room.amenities),
-                price: room.price,
-                offert_price: room.offert_price,
-                offert: room.offert,
-                status: room.status,
-                cancelation: room.cancelation,
-                description: room.description,
-                photos: JSON.stringify(room.photos)
-            });
+            const sqlRoom: RoomSQLInterface = toSQLRoom(room);
 
-            return newRoom;
+            const newRoom: RoomSQLInterface = await RoomModelMysql.create(sqlRoom);
+
+            return toDefaultRoom(newRoom);
         }
         catch (error) {
             console.error('Error in create of roomService', error);
@@ -77,14 +71,17 @@ export class RoomServiceSQL implements ServiceInterface<RoomSQLInterface> {
         }
     }
 
-    async update(id: number, room: RoomSQLInterface): Promise<RoomSQLInterface | null> {
+
+    async update(id: number, room: RoomInterface): Promise<RoomInterface | null> {
         try {
-            const existingRoom: RoomSQLInterface | null = await this.fetchById(id);
+            const existingRoom: RoomInterface | null = await this.fetchById(id);
             if (existingRoom == null) return null;
 
             const [updatedRoom] = await RoomModelMysql.update({
                 number: room.number,
-                type: room.type,
+                type: Object.values(RoomType).includes(room.type as RoomType)
+                    ? (room.type as RoomType)
+                    : RoomType.SINGLE_BED,
                 amenities: typeof room.amenities === 'string' ? room.amenities : JSON.stringify(room.amenities),
                 price: room.price,
                 offert_price: room.offert_price,
