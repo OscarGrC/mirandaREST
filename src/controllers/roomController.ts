@@ -213,4 +213,4 @@ roomRouter.post("/", authenticateJWT, PostFun(service, RoomValidator));
 roomRouter.put("/:id", authenticateJWT, PutFun(service, RoomValidator, "Room"));
 roomRouter.delete("/:id", authenticateJWT, DeleteFun(service, "Room"));
 
-roomRouter.post("/filter", authenticateJWT, GetByDates(service));
+//roomRouter.post("/filter", authenticateJWT, GetByDates(service));
