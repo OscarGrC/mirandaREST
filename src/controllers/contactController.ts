@@ -1,6 +1,6 @@
 import { ContactServiceMongo } from '../services/contactServiceMongo';
 import { Router } from 'express';
-import { ContactArchivedServiceMysql } from '../services/contactArchivedServiceSQL';
+import { ContactArchivedServiceMongo } from '../services/contactArchivedServiceMongo';
 import { ContactValidator } from '../validators/contactValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
 import { GetFun } from '../utils/genericFunctions/getControllerHandler';
@@ -250,7 +250,7 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  */
 export const contactRouter = Router();
 const service = new ContactServiceMongo();
-const serviceArchived = new ContactArchivedServiceMysql()
+const serviceArchived = new ContactArchivedServiceMongo()
 const baseUrl = ''
 const baseUrl2 = '/archived'
 
