@@ -1,4 +1,4 @@
-import { UserServiceSQL } from '../services/userServiceSQL';
+import { UserServiceMongo } from '../services/userServiceMongo';
 import { Router } from 'express';
 import { UserValidator } from '../validators/userValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -158,7 +158,7 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  */
 
 export const userRouter = Router();
-const service = new UserServiceSQL();
+const service = new UserServiceMongo();
 const baseUrl = ''
 
 userRouter.get(baseUrl, authenticateJWT, GetFun(service));

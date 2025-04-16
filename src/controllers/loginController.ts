@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import { UserServiceSQL } from '../services/userServiceSQL';
 import { signToken } from '../utils/token'
 
@@ -54,7 +54,7 @@ loginRouter.post('', async (req: Request, res: Response): Promise<any> => {
             return res.status(404).send('Usuario no encontrado');
         }
 
-        const validPassword = await bcrypt.compare(password, foundUser.password);
+        const validPassword = await bcryptjs.compare(password, foundUser.password);
         if (!validPassword) {
             return res.status(400).send('Contraseña incorrecta');
         }

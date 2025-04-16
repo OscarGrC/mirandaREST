@@ -1,4 +1,4 @@
-import { ContactServiceMysql } from '../services/contactServiceSQL';
+import { ContactServiceMongo } from '../services/contactServiceMongo';
 import { Router } from 'express';
 import { ContactArchivedServiceMysql } from '../services/contactArchivedServiceSQL';
 import { ContactValidator } from '../validators/contactValidator';
@@ -249,7 +249,7 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  *         description: Contacto archivado no encontrado
  */
 export const contactRouter = Router();
-const service = new ContactServiceMysql();
+const service = new ContactServiceMongo();
 const serviceArchived = new ContactArchivedServiceMysql()
 const baseUrl = ''
 const baseUrl2 = '/archived'

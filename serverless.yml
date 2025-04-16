@@ -1,20 +1,16 @@
 service: miranda-backend
-frameworkVersion: "4"
-package:
-  patterns:
-    - "!./**"
-    - "package.json"
-    - "node_modules/**"
-    - "dist/**"
-    - "data/**"
-    - "public/**"
+
+build:
+  esbuild: true
+
 provider:
   name: aws
   region: eu-west-3
   runtime: nodejs20.x
+
 functions:
   app:
-    handler: src/index.handler
+    handler: dist/src/index.handler
     events:
       - http:
           path: /
@@ -24,3 +20,10 @@ functions:
           path: /{proxy+}
           method: ANY
           cors: true
+
+package:
+  patterns:
+    - "dist/**"
+    - "package.json"
+    - "node_modules/**"
+ 

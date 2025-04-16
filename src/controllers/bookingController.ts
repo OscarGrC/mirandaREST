@@ -1,4 +1,4 @@
-import { BookingServiceSQL } from '../services/bookingServiceSQL';
+import { BookingServiceMongo } from '../services/bookingServiceMongo';
 import { Router } from 'express';
 import { BookingValidator } from '../validators/bookingValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -153,7 +153,7 @@ import { DeleteFun } from '../utils/genericFunctions/deleteControllerHandler';
  */
 
 export const bookingRouter = Router();
-const service = new BookingServiceSQL();
+const service = new BookingServiceMongo();
 const baseUrl: string = '/';
 
 bookingRouter.get(baseUrl, authenticateJWT, GetFun(service));

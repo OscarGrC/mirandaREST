@@ -1,4 +1,4 @@
-import { RoomServiceSQL } from '../services/roomServiceSQL';
+import { RoomServiceMongo } from '../services/roomServiceMongo';
 import { NextFunction, Router } from 'express';
 import { RoomValidator } from '../validators/roomValidator';
 import { authenticateJWT } from '../middleware/authenticateJWT';
@@ -205,7 +205,7 @@ import { GetByDates } from '../utils/genericFunctions/getByDatesControllerHandle
  *           example: ["https://urlfoto1.com", "https://urlfoto2.com", "https://urlfoto3.com"]
  */
 export const roomRouter = Router();
-const service = new RoomServiceSQL();
+const service = new RoomServiceMongo();
 
 roomRouter.get("/", authenticateJWT, GetFun(service));
 roomRouter.get("/:id", authenticateJWT, GetIdFun(service, "Room"));
